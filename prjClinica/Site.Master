@@ -1,0 +1,39 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="prjClinica.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - My ASP.NET Application</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body>
+    <form runat="server">       
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                
+              <asp:Label ID="header_" runat="server" Style="color:white; font-size:larger " /> 
+               
+            </div>
+        </div>
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                  
+            </asp:ContentPlaceHolder>
+            <hr />
+            <footer>
+                <asp:Label ID="rodape" runat="server" /> 
+            </footer>
+        </div>
+    </form>
+</body>
+</html>
