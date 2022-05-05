@@ -16,7 +16,7 @@ namespace prjClinica.Classes
         public  Usuario usuario {get; set;} 
         public static string stringConexao()
         {
-           return @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\WEB-Santa\prjClinica\prjClinica\App_Data\Database1.mdf;Integrated Security=True;Connect Timeout=30; Language = Portuguese";
+           return @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\unisanta\Downloads\prjClinica (3)\prjClinica\prjClinica\App_Data\Database1.mdf';Integrated Security=True;Connect Timeout=30; Language = Portuguese";
         }
 
         override public void Dispose()

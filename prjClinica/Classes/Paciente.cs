@@ -220,6 +220,30 @@ namespace prjClinica.Classes
             }
         }
 
+        public int deletar(Conexao con)
+        {
+
+            try
+            {
+                String sql = String.Concat("UPDATE ", nomeTabela, " SET stAtivo=0 WHERE id", tabela, "=", idPaciente);
+
+                SqlCommand comando = new SqlCommand(sql, con.con());
+
+                comando.CommandType = CommandType.Text;
+                comando.Prepare();
+
+                comando.ExecuteNonQuery();
+
+                atualizando(con, tabela, idPaciente);
+                return idPaciente;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
         public static Paciente busca(string id, Conexao con)
         {
             try

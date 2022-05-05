@@ -225,6 +225,7 @@ namespace prjClinica
 
         protected void btExclui_Click(object sender, EventArgs e)
         {
+
             Paciente paciente = (Paciente)Session["paciente"];
             if (paciente == null)
             {
@@ -233,6 +234,9 @@ namespace prjClinica
             }
             using (Conexao con = new Conexao(usuario))
             {
+                con.open();
+                paciente.deletar(con);
+                clinica.carregaLista(con);
                 txRelatorio.Text = clinica.relatorio();
             }
         }
