@@ -44,56 +44,63 @@
             <table>
                 <tr>
                     <td>
-                        <asp:Label ID="lbCadastrar" runat="server"  />
+                        <asp:Label ID="lbCadastrar" runat="server" />
+                    </td>
+                    <td>&nbsp;
                     </td>
                     <td>
-                        &nbsp;
+                        <asp:Label ID="lbBuscarPeloNome" runat="server" />
+                    </td>
+                    <td>&nbsp;
                     </td>
                     <td>
-                        <asp:Label ID="lbBuscarPeloNome" runat="server"  />
+                        <asp:Label ID="lbBuscarPeloId" runat="server" />
                     </td>
-                    <td>
-                        &nbsp;
+                    <td>&nbsp;
                     </td>
-                    <td>
-                        <asp:Label ID="lbBuscarPeloId" runat="server"  />
+                    <td>&nbsp;
                     </td>
-                    <TD>
-                        &nbsp;
-                    </TD>
-                    <TD>
-                        &nbsp;
-                    </TD>
-                    <TD>
-                        &nbsp;
-                    </TD>
+                    <td>&nbsp;
+                    </td>
                 </tr>
                 <tr>
                     <td>
                         <asp:Button ID="btOk" runat="server" Text="OK" Width="40px" OnClick="btOk_Click" /></td>
                     <td style="width: 40px">&nbsp;</td>
                     <td>
-                        
+
                         <asp:TextBox ID="buscarPeloNome" runat="server" Width="100px"></asp:TextBox>
                         <asp:Button ID="btBuscarPeloNome" runat="server" Text="OK" Width="40px" OnClick="btBuscarPeloNome_Click" />
                     </td>
-                     <td style="width: 40px">&nbsp;</td>
-                    <td>                        
+                    <td style="width: 40px">&nbsp;</td>
+                    <td>
                         <asp:TextBox ID="buscarPeloId" runat="server" Width="50px"></asp:TextBox>
-                        <asp:Button ID="btBuscarPeloId" runat="server" Text="OK" Width="40px" OnClick="btBuscarPeloId_Click"  />
+                        <asp:Button ID="btBuscarPeloId" runat="server" Text="OK" Width="40px" OnClick="btBuscarPeloId_Click" />
                     </td>
-                    <TD style="width:100px">
-                        &nbsp; 
-                    </TD>
-                    <td style="width:100px">
-                        <asp:Button ID="btEdita" runat="server" Text="Edita" Width="70px" visible="false" OnClick="btEdita_Click"/>
+                    <td style="width: 100px">&nbsp; 
                     </td>
-                    <td style="width:100px">
-                        <asp:Button ID="btExclui" runat="server" Text="Exclui" Width="70px" visible="false" OnClick="btExclui_Click" />
+                    <td style="width: 100px">
+                        <asp:Button ID="btEdita" runat="server" Text="Edita" Width="70px" Visible="false" OnClick="btEdita_Click" />
+                    </td>
+                    <td style="width: 100px">
+                        <asp:Button ID="btExclui" runat="server" Text="Exclui" Width="70px" Visible="false" OnClick="btExclui_Click" />
                     </td>
                 </tr>
-            </table>
-        </li>
+
+                 </table>
+            </li>
+
+           <li>
+
+                <asp:Label ID="Label1" runat="server" Width="130px" />
+                <asp:Label ID="Label2" Text="ID" runat="server" />&nbsp;
+                   <asp:RadioButton ID="id" runat="server" GroupName="ordem" AutoPostBack="true" OnCheckedChanged="id_CheckedChanged" />&nbsp;
+            <asp:Label ID="Label3" runat="server" />&nbsp;
+                   <asp:RadioButton ID="nome" Text="NOME" runat="server" GroupName="ordem" AutoPostBack="true" OnCheckedChanged="id_CheckedChanged" />&nbsp;
+         
+           
+</li>
+        
          <li>
            <hr class="linhaEscura" />
              

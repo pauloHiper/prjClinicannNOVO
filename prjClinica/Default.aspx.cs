@@ -18,6 +18,8 @@ namespace prjClinica
         {
             try
             {
+                mensagem.Text = String.Empty;
+
                 using (Conexao con = new Conexao(null))
                 {
                     con.open();
@@ -118,14 +120,25 @@ namespace prjClinica
             Paciente paciente = new Paciente(txNome.Text, rbMasc.Checked ? 'M' : 'F', (float)peso, (float)altura, dataNascimento);
 
             clinica.entraPaciente(paciente);
-
-            using (Conexao con = new Conexao(usuario))
+            try
             {
-                con.open();
-                paciente.insere(con);
-                txRelatorio.Text = clinica.relatorio();
-                Session["paciente"] = paciente;
-                btEdita.Visible = btExclui.Visible = true;
+                using (Conexao con = new Conexao(usuario))
+                {
+                    con.open();
+                    paciente.insere(con);
+                    txRelatorio.Text = clinica.relatorio();
+                    Session["paciente"] = paciente;
+                    btEdita.Visible = btExclui.Visible = true;
+                }
+                limpa();
+            }
+            catch (Exception ex)
+            {
+                mensagem.Text = "Erro ao Acessar a Tabela do Paciente";
+                if (usuario.perfil == "A")
+                {
+                    mensagem.Text = String.Concat(mensagem.Text, ex.Message);
+                }
             }
         }
 
@@ -139,6 +152,20 @@ namespace prjClinica
             rbMasc.Checked = paciente.getSexo() == 'M';
         }
 
+        private void limpa()
+        {
+            txNome.Text =
+            txDataNascimento.Text =
+            txPeso.Text = 
+            txAltura.Text = "";
+            rbFem.Checked =
+            rbMasc.Checked = false;
+            Session["paciente"] = null;
+
+            btEdita.Visible = btExclui.Visible = false;
+            btOk.Enabled= !btEdita.Visible;
+        }
+
         protected void btBuscarPeloNome_Click(object sender, EventArgs e)
         {
             if (buscarPeloNome.Text.Trim().Length < 3)
@@ -147,26 +174,40 @@ namespace prjClinica
                 return;
             }
 
-            using (Conexao con = new Conexao(usuario)){
-                con.open();
-                List<Paciente> lista = Paciente.buscaLike(buscarPeloNome.Text, con);
-
-                if (lista.Count == 0)
+            try
+            {
+                using (Conexao con = new Conexao(usuario))
                 {
-                    mensagem.Text = "Nenhum paciente corresponde a sua busca";
-                    return;
-                }
+                    con.open();
+                    List<Paciente> lista = Paciente.buscaLike(buscarPeloNome.Text, con);
 
-                if (lista.Count > 1)
-                {
-                    mensagem.Text = "Mais de um paciente corresponde a sua busca";
-                    return;
+                    if (lista.Count == 0)
+                    {
+                        mensagem.Text = "Nenhum paciente corresponde a sua busca";
+                        return;
+                    }
+
+                    if (lista.Count > 1)
+                    {
+                        mensagem.Text = "Mais de um paciente corresponde a sua busca";
+                        return;
+                    }
+                    Session["paciente"] = lista[0];
+                    popula(lista[0]);
+                    btEdita.Visible = btExclui.Visible = true;
+                    btOk.Enabled = !btEdita.Visible;
                 }
-                Session["paciente"] = lista[0];
-                popula(lista[0]);
-                btEdita.Visible = btExclui.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                mensagem.Text = "Erro ao Acessar a Tabela do Paciente";
+                if (usuario.perfil == "A")
+                {
+                    mensagem.Text = String.Concat(mensagem.Text, ex.Message);
+                }
             }
         }
+
 
         protected void btBuscarPeloId_Click(object sender, EventArgs e)
         {
@@ -177,18 +218,30 @@ namespace prjClinica
                 mensagem.Text = "Id digitado inválido";
                 return;
             }
-            using (Conexao con = new Conexao(usuario))
+            try
             {
-                con.open();
-                Paciente paciente = Paciente.busca(id, con);
-                if (paciente == null)
+                using (Conexao con = new Conexao(usuario))
                 {
-                    mensagem.Text = "Paciente id: " + id + " não encontrado";
-                    return;
+                    con.open();
+                    Paciente paciente = Paciente.busca(id, con);
+                    if (paciente == null)
+                    {
+                        mensagem.Text = "Paciente id: " + id + " não encontrado";
+                        return;
+                    }
+                    Session["paciente"] = paciente;
+                    popula(paciente);
+                    btEdita.Visible = btExclui.Visible = true;
+                    limpa();
                 }
-                Session["paciente"] = paciente;
-                popula(paciente);
-                btEdita.Visible = btExclui.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                mensagem.Text = "Erro ao Acessar a Tabela do Paciente";
+                if (usuario.perfil == "A")
+                {
+                    mensagem.Text = String.Concat(mensagem.Text, ex.Message);
+                }
             }
         }
 
@@ -200,26 +253,37 @@ namespace prjClinica
                 mensagem.Text = "Erro inesperado E200";
                 return;
             }
-            using (Conexao con = new Conexao(usuario))
+            try
             {
-                con.open();
-                double peso, altura;
-
-                DateTime dataNascimento;
-
-                if (!valida(out altura, out peso, out dataNascimento))
+                using (Conexao con = new Conexao(usuario))
                 {
-                    return;
-                }
-                paciente.setPeso((float)peso);
-                paciente.setAltura((float)altura);
-                paciente.setNome(txNome.Text);
-                paciente.setSexo(rbMasc.Checked ? 'M' : 'F');
-                paciente.setDataNascimento(dataNascimento);
+                    con.open();
+                    double peso, altura;
 
-                paciente.atualiza(con);
-                clinica.carregaLista(con);
-                txRelatorio.Text = clinica.relatorio();
+                    DateTime dataNascimento;
+
+                    if (!valida(out altura, out peso, out dataNascimento))
+                    {
+                        return;
+                    }
+                    paciente.setPeso((float)peso);
+                    paciente.setAltura((float)altura);
+                    paciente.setNome(txNome.Text);
+                    paciente.setSexo(rbMasc.Checked ? 'M' : 'F');
+                    paciente.setDataNascimento(dataNascimento);
+
+                    paciente.atualiza(con);
+                    clinica.carregaLista(con);
+                    txRelatorio.Text = clinica.relatorio();
+                }
+            }
+            catch (Exception ex)
+            {
+                mensagem.Text = "Erro ao Acessar a Tabela do Paciente";
+                if (usuario.perfil == "A")
+                {
+                    mensagem.Text = String.Concat(mensagem.Text, ex.Message);
+                }
             }
         }
 
@@ -232,12 +296,49 @@ namespace prjClinica
                 mensagem.Text = "Erro inesperado E230";
                 return;
             }
-            using (Conexao con = new Conexao(usuario))
+            try
             {
-                con.open();
-                paciente.deletar(con);
-                clinica.carregaLista(con);
-                txRelatorio.Text = clinica.relatorio();
+                using (Conexao con = new Conexao(usuario))
+                {
+                    con.open();
+                    paciente.deletar(con);
+                    clinica.carregaLista(con);
+                    txRelatorio.Text = clinica.relatorio();
+                    limpa();
+                }
+            }
+            catch(Exception ex)
+            {
+                mensagem.Text = "Erro ao Acessar a Tabela do Paciente";
+                if(usuario.perfil =="A")
+                {
+                    mensagem.Text = String.Concat(mensagem.Text, ex.Message);
+                }
+            }
+            
+        }
+
+        protected void id_CheckedChanged(object sender, EventArgs e)
+        {
+          
+            try
+            {
+                using (Conexao con = new Conexao(usuario))
+                {
+                    con.open();
+                    Paciente lista = new Paciente();
+                    clinica.carregaLista(con, id.Checked ? "IdPaciente" : "nome");
+                    btEdita.Visible = btExclui.Visible = true;
+                    btOk.Enabled = !btEdita.Visible;
+                }
+            }
+            catch (Exception ex)
+            {
+                mensagem.Text = "Erro ao Acessar a Tabela do Paciente";
+                if (usuario.perfil == "A")
+                {
+                    mensagem.Text = String.Concat(mensagem.Text, ex.Message);
+                }
             }
         }
     }

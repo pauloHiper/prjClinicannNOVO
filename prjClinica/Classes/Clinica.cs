@@ -19,9 +19,9 @@ namespace prjClinica.Classes
             lista = Paciente.listaPacientes(con);
         }
 
-        public void carregaLista(Conexao con)
+        public void carregaLista(Conexao con, string atual = "IdPaciente")
         {
-            lista = Paciente.listaPacientes(con);
+            lista = Paciente.listaPacientes(con, atual);
         }
 
         public string getNome()

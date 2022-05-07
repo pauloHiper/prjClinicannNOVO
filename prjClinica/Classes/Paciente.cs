@@ -122,7 +122,7 @@ namespace prjClinica.Classes
         public static List<Paciente> buscaLike(String nome, Conexao con)
         {
             List<Paciente> lista = new List<Paciente>();
-            String sql = String.Concat("SELECT id", tabela, " FROM ", nomeTabela, " where nome like @1 order by nome");
+            String sql = String.Concat("SELECT id", tabela, " FROM ", nomeTabela, " where nome like @1");
            
             SqlCommand comando = new SqlCommand(sql, con.con());
 
@@ -294,13 +294,13 @@ namespace prjClinica.Classes
             }
         }
 
-        public static List<Paciente> listaPacientes(Conexao con)
+        public static List<Paciente> listaPacientes(Conexao con, string atual = "IdPaciente")
         {
             try
             {
                 List<Paciente> lista = new List<Paciente>();
 
-                String sql = String.Concat("SELECT id", tabela, " FROM " + nomeTabela + " WHERE stAtivo=1");
+                String sql = String.Concat("SELECT id", tabela, " FROM " + nomeTabela + " WHERE stAtivo=1 ORDER BY ", atual);
                 DataTable dt = Conexao.executaSelect(con, sql);
                 DataRow[] linhas = dt.Select();  
 
